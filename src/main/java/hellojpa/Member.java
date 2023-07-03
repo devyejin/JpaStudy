@@ -18,4 +18,9 @@ public class Member {
     private String name;
 
     public Member() { } //JPA가 리플렉션을 이용하기때문에 기본 생성자 필수!
+
+    public Member(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
