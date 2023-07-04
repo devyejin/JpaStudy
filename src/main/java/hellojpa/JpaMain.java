@@ -1,12 +1,12 @@
 package hellojpa;
 
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
+
 
 public class JpaMain {
 
@@ -94,14 +94,58 @@ public class JpaMain {
 //            System.out.println("=========================");
 
             //플러시
-            Member flushMember = new Member(200L, "flushMember");
-            em.persist(flushMember);
+//            Member flushMember = new Member(200L, "flushMember");
+//            em.persist(flushMember);
+//
+//            //commit 전까지는 SQL을 볼 수도없고 DB에 반영할 수가 없는데, 미리하고싶다면 flush를 직접 호출
+//            em.flush(); //커밋전에 flush호출 즉, 변경사항이 반영됨
+//            System.out.println("=== 커밋전 ===");
 
-            //commit 전까지는 SQL을 볼 수도없고 DB에 반영할 수가 없는데, 미리하고싶다면 flush를 직접 호출
-            em.flush(); //커밋전에 flush호출 즉, 변경사항이 반영됨
-            System.out.println("=== 커밋전 ===");
+            //준영속상태 예씨
+//            Member member = em.find(Member.class, 100L);
+//            member.setName("KKKKKK"); //<- 아직 커밋전이므로 영속 컨텍스트 1차캐시에만 더티상태 (DB 미반영)
+//
+//            //<---- 트랜잭션 전에, 준영속 상태로 만든다면?
+//            em.detach(member);
+//            System.out.println("member 이름 : " + member.getName());
+//            System.out.println("===== 트랜잭션 커밋 전 ======");
+//            tx.commit(); //이때 SQL에 쿼리를 날림
 
-            tx.commit(); //이때 SQL에 쿼리를 날림
+//            Member member = em.find(Member.class, 100L); //<-쿼리 날라감
+//            member.setName("TTTTTT"); // 영속 상태
+//
+//            em.clear(); //영속 컨텍스트 다 비움
+//
+//            Member member2 = em.find(Member.class, 100L); //<- 컨텍스트 비웠으니 쿼리 또 날라감
+//            System.out.println("====== 트랜잭션 커밋 전 =====");
+
+            //기본키  1.@Id
+//            Member member = new Member();
+//            member.setUsername("userA");
+//            em.persist(member);
+
+            //과연 sequence객체를 공유할까?
+//            Store prod = new Store();
+//            prod.setProductName("호올스");
+//            em.persist(prod);
+
+            //Table 전략 예시
+//            Grade grade = new Grade();
+//            em.persist(grade);
+//
+//            tx.commit();
+
+            //SEQUENCE전략 - Store <- 50개 다 쓰면 또 SEQUENCE객체 데려오는지 테스트
+            System.out.println("===========");
+
+            for(int i=0; i<270; i++) {
+                em.persist(new Store("test"));
+            }
+
+            System.out.println("=============");
+
+            tx.commit();
+
         }catch (Exception e) {
             tx.rollback();
         }finally {
