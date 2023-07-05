@@ -21,7 +21,4 @@ public class Store {
     private Long id;
     private String productName;
 
-    public Store(String productName) {
-        this.productName = productName;
-    }
 }

@@ -19,16 +19,27 @@ import java.util.Date;
 public class Member {
 
     @Id //기본 키(PK)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE) //SEQUENCE전략은 DB '시퀀스 오브젝트'한테 위임 -> 숫자만가능
+    @GeneratedValue
+    @Column(name="MEMBER_ID")
     private Long id;
-    @Column(name="name", columnDefinition = "varchar(100) default 'EMPTY'") //ubdatable=false 시 변경불가
+    @Column(name="USERNAME")
     private String username;
 
 
-    public Member() { } //JPA가 리플렉션을 이용하기때문에 기본 생성자 필수!
+//    @Column(name="TEAM_ID")
+//    private Long teamId; <-- 테이블 중심
 
-    public Member(Long id, String username) {
-        this.id = id;
-        this.username = username;
+    @ManyToOne // Member가 n이니까
+    @JoinColumn(name="TEAM_ID") //TEAM에 있는 칼럼명
+    private Team team;
+
+    //@Setter 쓰고, 직접 Setter정의하면 어떻게되지? 직접 쓴게 오버라이드되나?
+    // -> oo된다함
+
+
+    public void changeTeam(Team team) {
+        this.team = team;
+        //team(주인이 아닌쪽에서 값을 설정하는 로직을 여기에 반영)
+        team.getMembers().add(this); // add(member)인데, 여기선 member=this니까
     }
 }

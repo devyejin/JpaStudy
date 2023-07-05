@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 
 public class JpaMain {
@@ -136,13 +137,103 @@ public class JpaMain {
 //            tx.commit();
 
             //SEQUENCE전략 - Store <- 50개 다 쓰면 또 SEQUENCE객체 데려오는지 테스트
-            System.out.println("===========");
+//            System.out.println("===========");
+//
+//            for(int i=0; i<270; i++) {
+//                em.persist(new Store("test"));
+//            }
+//
+//            System.out.println("=============");
+//
 
-            for(int i=0; i<270; i++) {
-                em.persist(new Store("test"));
-            }
+            //----------------------------------------------------------------------------------
+            //객체 중심의 설계
+            //저장, 팀에 회원을 저장할 때
+//            Team team = new Team();
+//            team.setName("TeamA");
+//            em.persist(team);
+//
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            member.setTeam(team); //<--- 객체와 객체간의 관계를 맺어줌! 오호
+//            em.persist(member);
+//
+//
+//            //우선 강제로 쿼리날리고
+//            em.flush();
+////            em.close(); //<-- 영속 컨텍스트 비우기 oh~no~ close가 아니라 clear
+//            em.clear();
+//
+//            //조회
+//            Member findMember = em.find(Member.class, member.getId());
+////            Team team1 = em.find(Team.class, findMember.getTeam().getId());
+////            System.out.println(team1.getMembers().size()); <-- 궁금해서 테스트
+//
+//            List<Member> members = findMember.getTeam().getMembers();
+//
+//            for(Member m : members) {
+//                System.out.println("회원들 나열 : " + m.getUsername());
+//            }
+//
 
-            System.out.println("=============");
+            //-------------------------------------------------------------------
+            //Team, Member에서 Member가 주인이므로, Member에서 Team정보를 입력해줘야함
+//            Team team = new Team();
+//            team.setName("TeamA");
+//            em.persist(team);
+//
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            //member에서 team을 정해줘야하는데 입력안하는 실수를 많이들 함
+//            member.setTeam(team); //<---- 이게 옳은 설정
+//            em.persist(member);
+//
+//            em.flush(); //커밋전 sql 날려서 DB랑 동기화해주고
+//            em.clear(); //1차 캐시 비워주고
+//
+//            Team findTeam = em.find(Team.class, team.getId()); //<--이때 DB에서 읽어오 거 이용
+//            List<Member> members = findTeam.getMembers();
+//
+//            for(Member m : members) {
+//                System.out.println("member : " + m.getUsername());
+//            }
+
+            //-----------------------------------------------------------------
+            //편의 메서드 사용한 로직
+//            Team team = new Team();
+//            team.setName("TeamA");
+//            em.persist(team);
+//
+//            Member member = new Member();
+//            member.setUsername("memberA");
+////            member.setTeam(); <--- 개별 로직보다는
+//            member.changeTeam(team); //<---양방향 값 들어가도록 '편의 메서드'
+//            em.persist(member);
+//
+//            //이제 양방향으로 값이 들어간거니까 flush, clear안하고 1차캐시에서 조회해도 조회되겠지
+//            Team findTeam = em.find(Team.class, team.getId());
+//
+//            List<Member> members = findTeam.getMembers();
+//
+//            for(Member m : members) {
+//                System.out.println("TeamA 회원 조회 : " + m.getUsername());
+//            }
+
+            //편의 메서드를 주인이 아닌쪽에서 만들었다면
+            Member member = new Member();
+            member.setUsername("memberA");
+//            em.persist(member); //<-- 여기서 추가하면 안됨! addMembers() 에서도 추가되는 내용이 있음
+
+            Team team = new Team();
+            team.setName("TeamA");
+            team.addMembers(member); //<-- 생성한 편의메서드
+            em.persist(team);
+            em.persist(member);
+
+            //flush, clear없이 1차캐시에서도 양방향으로 조회가능하겠쥬
+            //1. 멤버->팀 조회
+            Member findMember = em.find(Member.class, member.getId());
+            System.out.println(findMember.getTeam().getName());
 
             tx.commit();
 
