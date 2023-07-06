@@ -20,11 +20,19 @@ public class Team {
 
     //이제 객체의 패러다임의 대시작 ㅋㅋ 양방향을 부여해보자
 
-    @OneToMany(mappedBy = "team") //mappedBy는 상대 테이블(member)에서 누구랑 관련있는지
-    private List<Member> members = new ArrayList<>(); //초기화해두는 것이 관례
+    //이건 Team 엔티티가 연관관계 주인이 아닌경우
+//    @OneToMany(mappedBy = "team") //mappedBy는 상대 테이블(member)에서 누구랑 관련있는지
+//    private List<Member> members = new ArrayList<>(); //초기화해두는 것이 관례
 
-    public void addMembers(Member member) {
-       member.setTeam(this);
-       this.members.add(member);
-    }
+//    public void addMembers(Member member) {
+//       member.setTeam(this);
+//       this.members.add(member);
+//    }
+
+    // Team엔티티가 연관관계 주인이 되는 경우
+    @OneToMany
+//    @JoinColumn(name="TEAM_ID")
+    private List<Member> members = new ArrayList<>();
+
+
 }

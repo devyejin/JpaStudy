@@ -25,21 +25,26 @@ public class Member {
     @Column(name="USERNAME")
     private String username;
 
+    //일대다에서 Member -> Team 조회하고싶다면 (양방향, read-only)
+    @ManyToOne
+    @JoinColumn(name="TEAM_ID" insertable = false, updatable = false)
+    private Team team;
+
 
 //    @Column(name="TEAM_ID")
 //    private Long teamId; <-- 테이블 중심
 
-    @ManyToOne // Member가 n이니까
-    @JoinColumn(name="TEAM_ID") //TEAM에 있는 칼럼명
-    private Team team;
+//    @ManyToOne // Member가 n이니까
+//    @JoinColumn(name="TEAM_ID") //TEAM에 있는 칼럼명
+//    private Team team;
+//
+//    //@Setter 쓰고, 직접 Setter정의하면 어떻게되지? 직접 쓴게 오버라이드되나?
+//    // -> oo된다함
 
-    //@Setter 쓰고, 직접 Setter정의하면 어떻게되지? 직접 쓴게 오버라이드되나?
-    // -> oo된다함
 
-
-    public void changeTeam(Team team) {
-        this.team = team;
-        //team(주인이 아닌쪽에서 값을 설정하는 로직을 여기에 반영)
-        team.getMembers().add(this); // add(member)인데, 여기선 member=this니까
-    }
+//    public void changeTeam(Team team) {
+//        this.team = team;
+//        //team(주인이 아닌쪽에서 값을 설정하는 로직을 여기에 반영)
+//        team.getMembers().add(this); // add(member)인데, 여기선 member=this니까
+//    }
 }

@@ -220,20 +220,38 @@ public class JpaMain {
 //            }
 
             //편의 메서드를 주인이 아닌쪽에서 만들었다면
-            Member member = new Member();
-            member.setUsername("memberA");
-//            em.persist(member); //<-- 여기서 추가하면 안됨! addMembers() 에서도 추가되는 내용이 있음
+//            Member member = new Member();
+//            member.setUsername("memberA");
+////            em.persist(member); //<-- 여기서 추가하면 안됨! addMembers() 에서도 추가되는 내용이 있음
+//
+//            Team team = new Team();
+//            team.setName("TeamA");
+//            team.addMembers(member); //<-- 생성한 편의메서드
+//            em.persist(team);
+//            em.persist(member);
+//
+//            //flush, clear없이 1차캐시에서도 양방향으로 조회가능하겠쥬
+//            //1. 멤버->팀 조회
+//            Member findMember = em.find(Member.class, member.getId());
+//            System.out.println(findMember.getTeam().getName());
 
-            Team team = new Team();
-            team.setName("TeamA");
-            team.addMembers(member); //<-- 생성한 편의메서드
-            em.persist(team);
+            //일대다 단방향 Team -> Member (Team에서 외래키를 관리하는 경우)
+            //Team에서 member 등록할거니까 member부터
+            Member member = new Member();
+            member.setUsername("member1"); //실무에서는 setter잘 안씀
+
             em.persist(member);
 
-            //flush, clear없이 1차캐시에서도 양방향으로 조회가능하겠쥬
-            //1. 멤버->팀 조회
-            Member findMember = em.find(Member.class, member.getId());
-            System.out.println(findMember.getTeam().getName());
+            Team team = new Team();
+            team.setName("teamA");
+            team.getMembers().add(member);  // <--- 요기가 문제, Member테이블에서 업데이트가 되야할 내용인데
+            // MEMBER는 앞에서 영속 컨텍스트로 들어가버렸내?!
+
+            em.persist(team);
+
+
+
+
 
             tx.commit();
 
