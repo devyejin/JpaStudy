@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 요구사항 추가
@@ -25,10 +27,21 @@ public class Member {
     @Column(name="USERNAME")
     private String username;
 
+    @OneToMany(mappedBy = "member")
+    private List<Orders> orers = new ArrayList<>();
+
+
+
+
+//    //Member가 주인
+//    @OneToOne
+//    @JoinColumn(name="LOCKER_ID")
+//    private Locker locker;
+
     //일대다에서 Member -> Team 조회하고싶다면 (양방향, read-only)
-    @ManyToOne
-    @JoinColumn(name="TEAM_ID" insertable = false, updatable = false)
-    private Team team;
+//    @ManyToOne
+//    @JoinColumn(name="TEAM_ID" insertable = false, updatable = false)
+//    private Team team;
 
 
 //    @Column(name="TEAM_ID")
