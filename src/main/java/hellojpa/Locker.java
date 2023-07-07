@@ -5,9 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Setter
-@Getter
-@Entity
+//@Setter
+//@Getter
+//@Entity
 public class Locker {
     @Id
     @GeneratedValue

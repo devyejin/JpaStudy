@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Setter
 @Getter
-@Entity //@Entity이 있어야 jpa가 관리하는 객체가 됨
+//@Entity //@Entity이 있어야 jpa가 관리하는 객체가 됨
 public class Member {
 
     @Id //기본 키(PK)

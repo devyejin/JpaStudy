@@ -9,7 +9,7 @@ import java.util.List;
 
 @Setter
 @Getter
-@Entity
+//@Entity
 public class Team {
 
     @Id

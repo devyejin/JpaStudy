@@ -2,6 +2,8 @@ package hellojpa;
 
 
 
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -237,25 +239,39 @@ public class JpaMain {
 
             //일대다 단방향 Team -> Member (Team에서 외래키를 관리하는 경우)
             //Team에서 member 등록할거니까 member부터
-            Member member = new Member();
-            member.setUsername("member1"); //실무에서는 setter잘 안씀
-
-            em.persist(member);
-
-            Team team = new Team();
-            team.setName("teamA");
-            team.getMembers().add(member);  // <--- 요기가 문제, Member테이블에서 업데이트가 되야할 내용인데
-            // MEMBER는 앞에서 영속 컨텍스트로 들어가버렸내?!
-
-            em.persist(team);
-
-
+//            Member member = new Member();
+//            member.setUsername("member1"); //실무에서는 setter잘 안씀
+//
+//            em.persist(member);
+//
+//            Team team = new Team();
+//            team.setName("teamA");
+//            team.getMembers().add(member);  // <--- 요기가 문제, Member테이블에서 업데이트가 되야할 내용인데
+//            // MEMBER는 앞에서 영속 컨텍스트로 들어가버렸내?!
+//
+//            em.persist(team);
 
 
+            //테이블 조인전략
+            //영화 등록(INSERT)
+            Movie movie = new Movie();
+            movie.setActor("who");
+            movie.setName("엘리멘탈");
+            movie.setDirector("벤자민");
+            movie.setPrice(15000);
+            em.persist(movie);
+
+            em.flush();
+            em.clear(); //영속성 컨텍스트 1차캐시 비움
+                        //이제 조회(쿼리)시 DB에서 불러오겠지
+            //조회
+            Movie findMovie = em.find(Movie.class, 1L);
+            System.out.println("findMovie Name" + findMovie.getName());
 
             tx.commit();
 
         }catch (Exception e) {
+            System.out.println(e.getMessage());
             tx.rollback();
         }finally {
             em.close();
