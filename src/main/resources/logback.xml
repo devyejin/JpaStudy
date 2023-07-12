@@ -1,0 +1,8 @@
+<configuration>
+    <!-- 기존 설정 내용... -->
+
+    <!-- JPA 파라미터 바인딩 로그 출력 -->
+    <logger name="org.hibernate.type.descriptor.sql" level="TRACE" />
+
+    <!-- 나머지 로거 설정... -->
+</configuration>

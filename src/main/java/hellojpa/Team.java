@@ -9,7 +9,7 @@ import java.util.List;
 
 @Setter
 @Getter
-//@Entity
+@Entity
 public class Team {
 
     @Id
@@ -30,9 +30,9 @@ public class Team {
 //    }
 
     // Team엔티티가 연관관계 주인이 되는 경우
-    @OneToMany
-//    @JoinColumn(name="TEAM_ID")
-    private List<Member> members = new ArrayList<>();
+//    @OneToMany
+//    @JoinColumn(name="team")
+//    private List<Member> members = new ArrayList<>();
 
 
 }

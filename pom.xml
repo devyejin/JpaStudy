@@ -14,6 +14,34 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <build>
+        <!-- 기존 설정들... -->
+
+        <!-- Maven 컴파일 플러그인 설정 -->
+        <plugins>
+            <!-- 기존 플러그인들... -->
+
+            <!-- Maven 컴파일 플러그인 설정 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <!-- 기존 설정들... -->
+
+                    <!-- Logback 설정 파일 위치 지정 -->
+                    <systemPropertyVariables>
+                        <logback.configurationFile>src/main/resources/logback.xml</logback.configurationFile>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
+            <!-- 나머지 플러그인들... -->
+        </plugins>
+
+        <!-- 나머지 설정들... -->
+    </build>
+
     <dependencies>
 
         <!-- JPA 하이버네이트 -->
@@ -38,6 +66,13 @@
             <artifactId>lombok</artifactId>
             <version>1.18.26</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Logback 의존성 추가 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.9</version>
         </dependency>
 
 
